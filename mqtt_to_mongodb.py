@@ -13,7 +13,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("opcua/#")
 
 
-def on_message(client, userdata, msg):
+def on_message(client, userdata, msg,collection):
     receiveTime = datetime.datetime.now()
     message = msg.payload.decode("utf-8")
     isfloatValue = False
@@ -31,29 +31,32 @@ def on_message(client, userdata, msg):
         print(str(receiveTime) + ": " + msg.topic + " " + message)
         post = {"time": receiveTime, "topic": msg.topic, "value": message}
 
+    collection.insert_one(post)
 
-# Set up client for MongoDB
-mongodb_conn = os.environ['mongodb_connnection']
-mongoClient = MongoClient(mongodb_conn)
-db = mongoClient.plc_poc_db
-collection = db.plc_poc
+
+def mongodb_connection(mongodb_conn):
+    mongoClient = MongoClient(mongodb_conn)
+    db = mongoClient.plc_poc_db
+    collection = db.plc_poc
+    return collection
 
 # Initialize the client that should connect to the Mosquitto broker
-mqtt_server_conn = os.environ['mqtt_conn']
-client = mqtt.Client(mqtt_server_conn)
-client.on_connect = on_connect
-client.on_message = on_message
-connOK = False
-while(connOK == False):
-    try:
-        client.connect("mqtt_server_conn", 1883, 60)
-        connOK = True
-    except:
-        connOK = False
-    time.sleep(2)
-
-# Blocking loop to the Mosquitto broker
-client.loop_forever()
+def mqtt_connection(collection, mqtt_server_conn):
+    client = mqtt.Client(mqtt_server_conn)
+    client.on_connect = on_connect
+    client.on_message = on_message
+    connOK = False
+    while(connOK == False):
+        try:
+            client.connect(mqtt_server_conn, 1883, 60)
+            connOK = True
+        except:
+            connOK = False
+        time.sleep(2)
+    # Blocking loop to the Mosquitto broker
+    client.loop_forever()
 
 def function_handler(event, context):
-    return
+    mongodb_conn = os.environ['mongodb_connnection']
+    mqtt_server_conn = os.environ['mqtt_conn']
+    return mongodb_conn, mqtt_server_conn
