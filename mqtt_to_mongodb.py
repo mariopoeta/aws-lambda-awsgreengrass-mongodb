@@ -7,8 +7,6 @@ import os
 from pymongo import MongoClient
 import __future__
 
-iot_client = greengrasssdk.client('iot-data')
-
 def mqtt_topic():
     mqtt_server_conn = os.environ['mqtt-conn']
     client = mqtt.Client()
