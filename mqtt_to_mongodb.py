@@ -1,3 +1,4 @@
+import paho.mqtt.client as mqtt
 import greengrasssdk
 import time
 import json
@@ -7,10 +8,28 @@ import __future__
 
 iot_client = greengrasssdk.client('iot-data')
 
-def subscribe_topic():
-    iot_client.subscribe("opcua/#")
+def mqtt_topic():
+    mqtt_server_conn = os.environ['mqtt-conn']
+    client = mqtt.Client()
+    client.on_connect = on_connect
+    client.on_message = on_message
+    connOK = False
+    while(connOK == False):
+        try:
+            client.connect(mqtt_server_conn, 1883, 60)
+            connOK = True
+        except:
+            connOK = False
+        time.sleep(2)
+    # Blocking loop to the Mosquitto broker
+    client.loop_forever()
+    client.subscribe("opcua/#")
 
 def write_to_mongo(client, userdata, msg):
+    mongodb_conn = os.environ['mongodb_connnection']
+    mongoClient = MongoClient(mongodb_conn)
+    db = mongoClient.plc_poc_db
+    collection = db.plc_poc
     receivetime = datetime.datetime.now()
     message = msg.payload.decode("utf-8")
     isvaluefloat = False
@@ -30,11 +49,6 @@ def write_to_mongo(client, userdata, msg):
 
     collection.insert_one(post)
 
-mongodb_conn = os.environ['mongodb_connnection']
-
-mongoClient = MongoClient(mongodb_conn)
-db = mongoClient.plc_poc_db
-collection = db.plc_poc
 
 def function_handler(event, context):
     return
