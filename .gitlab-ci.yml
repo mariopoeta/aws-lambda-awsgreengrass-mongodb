@@ -1,0 +1,17 @@
+---
+
+image: python
+stages:
+  - lint
+
+lint:
+  stage: lint
+  script:
+    - pip install pre-commit
+    - pre-commit install
+    - pre-commit run -a
+  except:
+    - master
+  allow_failure: false
+
+
