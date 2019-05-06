@@ -12,8 +12,8 @@ iot_client = greengrasssdk.client('iot-data')
 def mqtt_topic():
     mqtt_server_conn = os.environ['mqtt-conn']
     client = mqtt.Client()
-    client.on_connect = on_connect
-    client.on_message = on_message
+    client.on_connect = mqtt_topic
+    client.on_message = write_to_mongo
     connOK = False
     while(connOK == False):
         try:
