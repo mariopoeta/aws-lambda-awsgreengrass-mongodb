@@ -7,11 +7,9 @@ import os
 from pymongo import MongoClient
 import __future__
 
-
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
     client.subscribe("opcua/#")
-
 
 def on_message(client, userdata, msg,collection):
     receiveTime = datetime.datetime.now()
@@ -32,7 +30,6 @@ def on_message(client, userdata, msg,collection):
         post = {"time": receiveTime, "topic": msg.topic, "value": message}
 
     collection.insert_one(post)
-
 
 def mongodb_connection(mongodb_conn):
     mongoClient = MongoClient(mongodb_conn)
