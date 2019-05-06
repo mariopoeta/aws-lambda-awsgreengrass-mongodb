@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 import paho.mqtt.client as mqtt
 import greengrasssdk
 import time
