@@ -5,8 +5,6 @@ import datetime
 import os
 import __future__
 
-
-
 iot_client = greengrasssdk.client('iot-data')
 
 def subscribe_topic():
