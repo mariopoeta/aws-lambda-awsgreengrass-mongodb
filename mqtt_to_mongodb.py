@@ -8,7 +8,7 @@ from pymongo import MongoClient
 import __future__
 
 def mqtt_topic():
-    mqtt_server_conn = os.environ['mqtt-conn']
+    mqtt_server_conn = os.environ['mqtt_conn']
     client = mqtt.Client()
     client.on_connect = mqtt_topic
     client.on_message = write_to_mongo
