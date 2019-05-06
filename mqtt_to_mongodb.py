@@ -8,11 +8,11 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, InvalidName
 import __future__
 
-def on_connect(client, userdata, flags, rc):
+def on_connect(mqttc, userdata, flags, rc):
     print("Connected with result code "+str(rc))
-    client.subscribe("/opcua/#")
+    mqttc.subscribe("/opcua/#")
 
-def on_message(client, userdata, msg, collection):
+def on_message(mqttc, userdata, msg, collection):
     receiveTime = datetime.datetime.now()
     message = msg.payload.decode("utf-8")
     isfloatValue = False
@@ -30,18 +30,21 @@ def on_message(client, userdata, msg, collection):
         print(str(receiveTime) + ": " + msg.topic + " " + message)
         post = {"time": receiveTime, "topic": msg.topic, "value": message}
 
+    collection.insert_one(post)
+
+def mongodb_connection():
     mongodb_conn = os.environ['mongodb_connnection']
     mongoClient = MongoClient(mongodb_conn)
     db = mongoClient.plc_poc_db
     collection = db.plc_poc
-    collection.insert_one(post)
+    return collection
 
 def topic_to_mongo():
     mqtt_server_conn = os.environ['mqtt_conn']
-    client = mqtt.Client(mqtt_server_conn)
-    client.on_connect = on_connect
-    client.on_message = on_message
-    client.loop_forever()
+    mqttc = mqtt.Client(mqtt_server_conn)
+    mqttc.on_connect = on_connect
+    mqttc.on_message = on_message
+    mqttc.loop_forever()
 
 def function_handler(event, context):
     topic_to_mongo()
