@@ -37,6 +37,10 @@ def on_message(mqttc, userdata, msg, collection):
 def mongodb_connection():
     mongodb_conn = os.environ['mongodb_connnection']
     mongoClient = MongoClient(mongodb_conn)
+    try:
+        mongoClient.admin.command('ismaster')
+    except ConnectionFailure:
+        print("Server not available")
     db = mongoClient.plc_poc_db
     collection = db.plc_poc
     return collection
@@ -49,4 +53,5 @@ def topic_to_mongo():
     mqttc.loop_forever()
 
 def function_handler(event, context):
+    mongodb_connection()
     topic_to_mongo()
