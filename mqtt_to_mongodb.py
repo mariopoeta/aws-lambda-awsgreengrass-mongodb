@@ -8,11 +8,11 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, InvalidName
 import __future__
 
-def on_connect(mqttc, userdata, flags, rc):
+def on_connect(mqtt, userdata, flags, rc):
     print("Connected with result code "+str(rc))
-    mqttc.subscribe("/opcua/#")
+    mqtt.subscribe("/opcua/#")
 
-def on_message(mqttc, userdata, msg, collection):
+def on_message(mqtt, userdata, msg, collection):
     receiveTime = datetime.datetime.now()
     message = msg.payload.decode("utf-8")
     isfloatValue = False
@@ -46,5 +46,11 @@ def topic_to_mongo():
     mqttc.on_message = on_message
     mqttc.loop_forever()
 
-def function_handler(event, context):
+
+def start_listening():
     topic_to_mongo()
+
+def function_handler(event, context):
+    return
+
+
