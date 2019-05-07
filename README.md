@@ -3,4 +3,4 @@
 
 *You will need to create another subescription in greengrass and you are done*
 
-![Image description](mqtt_to_mongodb.png)
+![Greengrass With mongoDB](mqtt_to_mongo.png)
