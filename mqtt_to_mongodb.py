@@ -46,7 +46,6 @@ def topic_to_mongo():
     mqttc.on_message = on_message
     mqttc.loop_forever()
 
-
 def start_listening():
     topic_to_mongo()
 
