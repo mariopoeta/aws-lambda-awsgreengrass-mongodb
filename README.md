@@ -1,4 +1,4 @@
-After finishing my PoC with AWS Greengrass with PLC i was cuirous if i could use it with a local database, i choosed mongoDB.
+After finishing my PoC of AWS Greengrass with PLC i was curious if i could use it with a local database, i choosed mongoDB.
 
 ![ABB PLC](PLC.jpg)
 
