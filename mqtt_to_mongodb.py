@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import paho.mqtt.client as mqtt
 import time
 import json
@@ -9,7 +11,7 @@ import __future__
 
 def on_connect(mqtt, userdata, flags, rc):
     print("Connected with result code "+str(rc))
-    mqtt.subscribe("/opcua/#")
+    mqtt.subscribe("/topic/#")
 
 def on_message(mqtt, userdata, msg, collection):
     receiveTime = datetime.datetime.now()
@@ -32,23 +34,15 @@ def on_message(mqtt, userdata, msg, collection):
     collection.insert_one(post)
 
 def mongodb_connection():
-    mongodb_conn = os.environ['mongodb_connnection']
+    mongodb_conn = "127.0.0.1"
     mongoClient = MongoClient(mongodb_conn)
     db = mongoClient.plc_poc_db
     collection = db.plc_poc
     return collection
 
-def mongodb_connection():
-    mqtt_server_conn = os.environ['mqtt_conn']
-    mqttc = mqtt.Client(mqtt_server_conn)
-    mqttc.on_connect = on_connect
-    mqttc.on_message = on_message
-    mqttc.loop_forever()
-
-def start_listening():
-    mongodb_connection()
-
-def function_handler(event, context):
-    return
-
-
+mqtt_server_conn = "127.0.0.1"
+mqttc = mqtt.Client()
+mqttc.on_connect = on_connect
+mqttc.on_message = on_message
+mqttc.connect(mqtt_server_conn, 1883, 60)
+mqttc.loop_forever()
