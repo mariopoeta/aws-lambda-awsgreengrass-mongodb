@@ -39,7 +39,7 @@ def mongodb_connection():
     collection = db.plc_poc
     return collection
 
-def topic_to_mongo():
+def mongodb_connection():
     mqtt_server_conn = os.environ['mqtt_conn']
     mqttc = mqtt.Client(mqtt_server_conn)
     mqttc.on_connect = on_connect
@@ -47,7 +47,7 @@ def topic_to_mongo():
     mqttc.loop_forever()
 
 def start_listening():
-    topic_to_mongo()
+    mongodb_connection()
 
 def function_handler(event, context):
     return
