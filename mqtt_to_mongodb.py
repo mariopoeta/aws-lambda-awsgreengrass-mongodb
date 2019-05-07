@@ -1,5 +1,4 @@
 import paho.mqtt.client as mqtt
-import greengrasssdk
 import time
 import json
 import datetime
