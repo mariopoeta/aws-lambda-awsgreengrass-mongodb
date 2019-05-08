@@ -13,13 +13,16 @@ from pymongo.errors import ConnectionFailure, InvalidName
 import __future__
 
 def write_to_mongo(topic_message):
-    mongodb_conn = "localhost"
-    mongoClient = MongoClient(mongodb_conn)
-    db = mongoClient.plc_poc_db
-    collection = db.plc_poc
-    receiveTime = datetime.datetime.now()
-    message = {"time": receiveTime, "value": topic_message}
-    collection.insert_one(message)
+    try:
+        mongodb_conn = "localhost"
+        mongoClient = MongoClient(mongodb_conn)
+        db = mongoClient.plc_poc_db
+        collection = db.plc_poc
+        receiveTime = datetime.datetime.now()
+        message = {"time": receiveTime, "value": topic_message}
+        collection.insert_one(message)
+     except Exception as e:
+        logging.error(e)
 
 def function_handler(event, context):
     try:
