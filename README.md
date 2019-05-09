@@ -8,4 +8,4 @@ You will need to create another subescription in greengrass and you are done
 
 ![Greengrass With mongoDB](mqttaws.png)
 
-*if you are curious about the plc_messagebird lambda, check out: https://www.hackster.io/mariopoeta/sms-from-plc-with-aws-iot-and-messagebird-sms-api-67b4fb*
+*if you are curious about the plc_messagebird lambda, check: https://www.hackster.io/mariopoeta/sms-from-plc-with-aws-iot-and-messagebird-sms-api-67b4fb*
