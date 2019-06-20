@@ -18,8 +18,7 @@ def write_to_mongo(topic_message):
         mongoClient = MongoClient(mongodb_conn)
         db = mongoClient.plc_poc_db
         collection = db.plc_poc
-        receiveTime = datetime.datetime.now()
-        message = {"time": receiveTime, "value": topic_message}
+        message = {"value": topic_message}
         collection.insert_one(message)
      except Exception as e:
         logging.error(e)
