@@ -10,7 +10,6 @@ import dns.resolver
 import dns.inet
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, InvalidName
-import __future__
 
 
 def write_to_mongo(topic_message):
