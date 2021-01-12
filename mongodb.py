@@ -12,6 +12,7 @@ from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, InvalidName
 import __future__
 
+
 def write_to_mongo(topic_message):
     try:
         mongodb_conn = "localhost"
@@ -20,8 +21,9 @@ def write_to_mongo(topic_message):
         collection = db.plc_poc
         message = {"value": topic_message}
         collection.insert_one(message)
-     except Exception as e:
+    except Exception as e:
         logging.error(e)
+
 
 def function_handler(event, context):
     try:
